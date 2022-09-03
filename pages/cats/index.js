@@ -1,10 +1,32 @@
-import React from "react";
-import Nav from "../../components/Nav/Nav";
+import React, { useEffect, useState } from "react";
+import Nav from "../../components/Nav/Nav.js";
+import Card from "../../components/Card/Card.js";
 
 export default function index() {
+  const [cats, setCats] = useState([]);
+
+  const fetchCats = async () => {
+    const response = await fetch("/api/cats");
+    const data = await response.json();
+    console.log("Cat data: ", data);
+    setCats(data);
+  };
+
+  useEffect(() => {
+    fetchCats();
+  }, []);
   return (
-    <>
+    <div>
       <Nav />
-    </>
+      {cats.map((cat) => {
+        <Card
+          name={cat.name}
+          id={cat.id}
+          phone={cat.phone}
+          email={cat.email}
+          image={cat.image}
+        />;
+      })}
+    </div>
   );
 }
